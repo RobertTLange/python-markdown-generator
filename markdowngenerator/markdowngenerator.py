@@ -24,8 +24,6 @@ from .config.conf import (
     TABLE_OF_CONTENT_LINE_POSITION,
 )
 
-# from standardizer.markdown.config.log import logger
-
 
 class MarkdownGenerator:
     """Class for generating GitLab or GitHub flavored Markdown."""
@@ -229,7 +227,7 @@ class MarkdownGenerator:
         )
         if self.enable_write:
             self.document.close()
-            self.document = open(self.file, "w")
+            self.document = open(self.filename, "w")
             self.document.writelines(self.document_data_array)
 
     def writeText(self, text, html_escape: bool = True):
@@ -267,19 +265,19 @@ class MarkdownGenerator:
         """
         if text is None:
             # Just forcing new line, in Markdown there should be 2 or more spaces as well
-            self.document_data_array.append(str("  ") + linesep)
+            self.document_data_array.append(str("") + linesep)
             if self.enable_write:
-                self.document.write(str("  ") + linesep)
+                self.document.write(str("") + linesep)
 
             return
         if html_escape:
-            self.document_data_array.append(escape(str(text)) + "  " + linesep)
+            self.document_data_array.append(escape(str(text)) + "" + linesep)
             if self.enable_write:
-                self.document.write(escape(str(text)) + "  " + linesep)
+                self.document.write(escape(str(text)) + "" + linesep)
             return
-        self.document_data_array.append(str(text) + "  " + linesep)
+        self.document_data_array.append(str(text) + "" + linesep)
         if self.enable_write:
-            self.document.write(str(text) + "  " + linesep)
+            self.document.write(str(text) + "" + linesep)
 
     def writeAttributeValuePairLine(self, key_value_pair: tuple, total_padding=30):
 
@@ -503,7 +501,7 @@ class MarkdownGenerator:
 
         :param text: Actual content/code into code block
         :param escape_html: Wheather the input is html escaped or not. Default is True
-        :param write: Wheather the output is written immediately or returned. 
+        :param write: Wheather the output is written immediately or returned.
         :return: If write is false, generated InlineCodeBlock is returned
         :rtype: string
         By default constructed output is returned only.
@@ -667,9 +665,9 @@ class MarkdownGenerator:
                         self.writeText("| ")
                         for list_str in element:
                             self.writeText(list_str)
-                            self.writeText("<br> ", html_escape=False)
+                            self.writeText("<br>", html_escape=False)
                     else:
-                        self.writeText(f"| {element} ", html_escape)
+                        self.writeText(f"| {element}", html_escape)
 
                 self.writeTextLine(f"|")
 
@@ -682,9 +680,9 @@ class MarkdownGenerator:
                         self.writeText("| ")
                         for list_str in row.get(key):
                             self.writeText(list_str)
-                            self.writeText("<br> ", html_escape=False)
+                            self.writeText("<br>", html_escape=False)
                     else:
-                        self.writeText(f"| {row.get(key)} ", html_escape)
+                        self.writeText(f"| {row.get(key)}", html_escape)
                 self.writeTextLine(f"|")
         self.writeTextLine()
 
